@@ -204,14 +204,15 @@ export function AccountPage() {
     }
   }, [search]) // pathname, hash, navigate는 안정적 — search 변경 시에만 실행
 
-  // #tax, #docs 해시로 해당 박스로 스크롤 (끼루 챗봇 링크 연동)
+  // #tax, #docs, #limit 해시로 해당 박스로 스크롤 (끼루 챗봇 링크 연동)
+  // opened가 바뀐 뒤에도 재실행해야 다른 화면에서 넘어올 때 박스가 그려진 후 스크롤된다
   useEffect(() => {
-    if (hash === '#tax' || hash === '#docs') {
+    if (opened && (hash === '#tax' || hash === '#docs' || hash === '#limit')) {
       const selector = `[data-box="${hash.slice(1)}"]`
       const el = document.querySelector(selector)
       el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }, [hash])
+  }, [hash, opened])
 
   // 탭을 누르면 주소 끝(#flow)만 바꾸고 기록은 남기지 않음(원본의 replaceState)
   const setPage = (key: string) => {
