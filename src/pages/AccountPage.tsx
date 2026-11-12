@@ -204,9 +204,9 @@ export function AccountPage() {
     }
   }, [search]) // pathname, hash, navigate는 안정적 — search 변경 시에만 실행
 
-  // #tax, #docs 해시로 해당 박스로 스크롤 (끼루 챗봇 링크 연동)
+  // #tax, #docs, #limit 해시로 해당 박스로 스크롤 (끼루 챗봇 링크 연동)
   useEffect(() => {
-    if (hash === '#tax' || hash === '#docs') {
+    if (hash === '#tax' || hash === '#docs' || hash === '#limit') {
       const selector = `[data-box="${hash.slice(1)}"]`
       const el = document.querySelector(selector)
       el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
