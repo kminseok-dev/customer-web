@@ -6,8 +6,10 @@ export function LandingClosing({ t, loggedIn }: { t: LandingTexts, loggedIn: boo
   return (
     <div id="pinB">
       <section id="s11" data-screen-label="S11 Closing">
+        {/* S0~S9와 같은 1920×1080 무대(LandingStage 주석 참고) */}
+        <div className="stg" id="stg11">
         <div id="ph11">
-          <img src="/assets/photo-closing.jpg" alt="남산 N서울타워" />
+          <img src="/assets/photo-morning.jpg" alt="맑은 아침의 서울" />
           <i />
         </div>
         <div id="w11">
@@ -60,6 +62,7 @@ export function LandingClosing({ t, loggedIn }: { t: LandingTexts, loggedIn: boo
               <Icon name="arrow-right" />
             </Link>
           </div>
+        </div>
         </div>
       </section>
     </div>

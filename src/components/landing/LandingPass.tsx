@@ -4,6 +4,15 @@ import type { LandingTexts } from './landingTexts'
 
 export function LandingPass({ t }: { t: LandingTexts }) {
   return (
+    <>
+    {/* 체결 알림(장식): 단계가 끝나는 박자에 앱 알림처럼 한 장 올라왔다가 패스포트 탭으로 들어간다. 번호·단계 이름·그 장면의 숫자는 엔진이 채운다 */}
+    <div id="stampFx" aria-hidden="true">
+      <div className="nf">
+        <b className="nf-n" />
+        <span className="nf-t" />
+        <span className="nf-v" />
+      </div>
+    </div>
     <div id="passWrap">
       <div id="pnav">
         <div className="pni">
@@ -53,5 +62,6 @@ export function LandingPass({ t }: { t: LandingTexts }) {
         </div>
       </div>
     </div>
+    </>
   )
 }

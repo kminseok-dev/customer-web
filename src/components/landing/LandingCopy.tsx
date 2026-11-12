@@ -1,29 +1,6 @@
 export function LandingCopy() {
   return (
     <>
-      <div className="blk" id="c0">
-        <div className="h">
-          <span className="ml">
-            <span>국내로 잇는 투자,</span>
-          </span>
-          <span className="ml">
-            <span>내일로 이어지는 가치</span>
-          </span>
-        </div>
-      </div>
-      <div className="blk" id="c2">
-        <div className="h">
-          <span className="ml">
-            <span>입고 수량은</span>
-          </span>
-          <span className="ml">
-            <span>세 수량 중</span>
-          </span>
-          <span className="ml">
-            <span>가장 작은 값이에요</span>
-          </span>
-        </div>
-      </div>
       <div className="blk" id="c3">
         <div className="row">
           <div className="h">

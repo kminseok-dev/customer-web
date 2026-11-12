@@ -33,6 +33,8 @@ export function LandingPage() {
       <LandingClosing t={t} loggedIn={loggedIn} />
       <LandingFooter />
       <LandingPass t={t} />
+      {/* 발표자용 현재 장면 번호(엔진이 채움) */}
+      <div id="sceneNo" aria-hidden="true" />
     </div>
   )
 }
