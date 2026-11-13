@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react'
 import { createPortal } from 'react-dom'
 import '../../styles/tokens.css'
 import { checkPackage } from '../../api/stockPackage'
@@ -128,10 +129,20 @@ export function InvestNewPkg({ nm, cash, fees, onPatch, onClose, onMake, onDialo
   const nextLabel = st < 2 ? '다음' : st === 2 ? (empty ? '만들기' : '만들고 바로 사기') : '주문하기'
   const nextDis = st === 2 ? !wOk && !empty : !nextOn
   const nextActive = st === 2 ? wOk : nextOn
+  // Enter: [다음] 버튼과 같다. 입력칸은 이름(1단계)·살 금액(4단계)에서만 받는다 — 검색칸 Enter로 빈 패키지가 만들어지지 않게.
+  // 비중 단계(만들기가 확인 없이 실행됨)와 링크·버튼·폼(자기 동작), 한글 조합 중(Safari는 keyCode 229), 키 누르고 있기는 넘기지 않는다
+  const onEnter = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter' || e.repeat || e.nativeEvent.isComposing || e.keyCode === 229 || st === 2) return
+    const t = e.target as HTMLElement
+    const ok = t.tagName === 'INPUT' ? st !== 1 : !t.closest('a,button,select,textarea,form,[role=button]')
+    if (!ok) return
+    e.preventDefault()
+    if (!nextDis) next()
+  }
 
   return createPortal(
     <div className={styles.backdrop}>
-      <div role="dialog" aria-modal="true" aria-label="새 패키지" className={styles.dialog}>
+      <div role="dialog" aria-modal="true" aria-label="새 패키지" className={styles.dialog} onKeyDown={onEnter}>
         <div className={styles.head}>
           <h2 className={styles.title}>새 패키지</h2>
           <button type="button" className={styles.close} onClick={onClose} aria-label="닫기">

@@ -35,9 +35,9 @@ export function useServerPackages(): ServerPackages {
         if (!alive) return
         setRes({
           state: 'ready',
-          views: viewsFromServer(summaries, details, holdings),
+          views: viewsFromServer(summaries, details, holdings.packages),
           orders: ordersFromServer(orders),
-          cash: holdings.find((h) => h.buyingPower != null)?.buyingPower ?? 0
+          cash: holdings.buyingPower ?? 0
         })
       } catch (err) {
         if (alive) setRes({ state: failState(err), views: [], orders: [], cash: 0 })

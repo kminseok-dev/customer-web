@@ -189,6 +189,13 @@ export interface PackageHolding {
   buyingPower: number | null // 예수금에서 가정산을 뺀 주문 가능 금액
 }
 
+// 모든 패키지 보유 현황. 예수금·주문 가능 금액은 계좌 하나의 값이라 목록 밖에 있고, 패키지가 없어도 온다(계좌가 없으면 null)
+export interface AllHoldings {
+  accountAmount: number | null
+  buyingPower: number | null
+  packages: PackageHolding[]
+}
+
 export type OrderStatusKey = 'EXECUTED' | 'REJECTED'
 
 export interface OrderResult {
@@ -254,7 +261,7 @@ export const checkPackage = (items: CheckRequestItem[]) => unwrap(apiClient.post
 export const fetchPackages = () => unwrap(apiClient.get<ApiResponse<PackageSummary[]>>(BASE))
 export const fetchPackage = (id: number) => unwrap(apiClient.get<ApiResponse<PackageDetail>>(BASE + '/' + id))
 // 현재가(KIS)까지 받아 오므로 다른 요청보다 오래 걸릴 수 있다
-export const fetchAllHoldings = () => unwrap(apiClient.get<ApiResponse<PackageHolding[]>>(BASE + '/holdings', { timeout: 30000 }))
+export const fetchAllHoldings = () => unwrap(apiClient.get<ApiResponse<AllHoldings>>(BASE + '/holdings', { timeout: 30000 }))
 export const fetchAllOrders = () => unwrap(apiClient.get<ApiResponse<OrderResult[]>>(BASE + '/orders'))
 export const fetchOrderFees = () => unwrap(apiClient.get<ApiResponse<OrderFees>>(BASE + '/order-fees'))
 export const fetchQuotes = (tickers: string[], signal?: AbortSignal) => unwrap(apiClient.get<ApiResponse<Quote[]>>(BASE + '/quotes', { params: { tickers: tickers.join(',') }, signal, timeout: 30000 }))
