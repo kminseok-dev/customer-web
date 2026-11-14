@@ -46,7 +46,7 @@ export const bizDay = (d: string): string => {
 }
 // 데이터 기준일: 기준 영업일(12-31 넘으면 12-31). 계산한 개설일이 출시일보다 앞서면 출시일 다음 영업일로 당김
 export const anchor = (): string => {
-  let a = bizDay(F.today())
+  let a = bizDay(capEnd(F.today()))
   const first = bizAdd(FIXED.LAUNCH, 1)
   if (bizAdd(a, -OFF.opened) < first) a = bizAdd(first, OFF.opened)
   return a
@@ -103,9 +103,9 @@ export interface PlanResult {
 
 export const F = {
   // ===== 업무일 =====
-  today: (): string => capEnd(getBusinessToday()),
-  // 기준 영업일(토·일 → 직전 금요일). 상단 '업무일'은 F.today() 그대로
-  biz: (): string => bizDay(F.today()),
+  today: (): string => getBusinessToday(), // 화면에 보이는 실제 업무일(12-31을 넘어도 그대로)
+  // 기준 영업일(토·일 → 직전 금요일). 예시 데이터·감면 구간 계산용이라 가입 마감일(12-31)에서 자른다
+  biz: (): string => bizDay(capEnd(F.today())),
   bizDay,
   anchor, bizAdd, addDays, addMonths, isBiz,
   prevBiz: (d?: string): string => bizAdd(d || F.biz(), -1),
@@ -118,11 +118,11 @@ export const F = {
   },
   ago: (k: number): string => bizAdd(anchor(), -k), // 기준일로부터 k영업일 전
   band: (d: string): DeductionBand => {
-    const m = Number(d.split('-')[1])
+    const m = Number(capEnd(d).split('-')[1]) // 가입 마감 뒤에는 12월 구간
     return C.DEDUCTION_BANDS.find((b) => m >= b.from && m <= b.to)! // 1~12월 전 구간이 정의돼 있음
   },
   bandEnd: (d: string): string => {
-    const b = F.band(d), y = +d.slice(0, 4), last = new Date(Date.UTC(y, b.to, 0)).getUTCDate()
+    const b = F.band(d), y = +capEnd(d).slice(0, 4), last = new Date(Date.UTC(y, b.to, 0)).getUTCDate()
     return y + '-' + String(b.to).padStart(2, '0') + '-' + String(last).padStart(2, '0')
   },
   won: (n: number): string => Math.round(n).toLocaleString('ko-KR'),
