@@ -136,7 +136,7 @@
   left: 5%;
   width: 30%;
   bottom: 0;
-  background: var(--color-chart-general);
+  background: var(--color-line-strong); /* 비교 기준이라 회색으로 한 발 물러남 — 강조는 RIA 막대(남색·금색) */
   border-radius: var(--radius-2) var(--radius-2) 0 0;
   transition: height var(--chart-motion-duration) ease;
 }
@@ -357,7 +357,7 @@
   font-variant-numeric: tabular-nums;
   transition: bottom var(--chart-motion-duration) ease;
 }
-.amountGeneral { left: 5%; }
+.amountGeneral { left: 5%; color: var(--color-sub); font-weight: var(--font-weight-medium); }
 .amountRia { right: 5%; }
 .reliefLabel {
   left: 36%;
@@ -388,7 +388,8 @@
 .barRelief {
   right: 5%;
   width: 30%;
-  background: var(--color-gold);
+  /* 확정 감면액: 금색 빗금. 선 색은 금색을 흰색과 섞어 한두 단계 옅게(금색 60%). 추가 예상 감면액은 .expectedRelief의 옅은 빗금(흰 바탕 + 가는 금색 선) */
+  background: repeating-linear-gradient(135deg, var(--color-gold-light) 0 4px, color-mix(in srgb, var(--color-gold) 60%, var(--color-surface)) 4px 7px);
   border-radius: var(--radius-2) var(--radius-2) 0 0;
   transition: height var(--chart-motion-duration) ease, bottom var(--chart-motion-duration) ease;
 }
@@ -403,10 +404,12 @@
 .chartLegend span { display: inline-flex; align-items: center; gap: var(--space-4); }
 .taxSwatch, .reliefSwatch { width: 12px; height: 10px; display: inline-block; }
 .taxSwatch { background: var(--color-navy); }
-.reliefSwatch { background: var(--color-gold); }
+.reliefSwatch { background: repeating-linear-gradient(135deg, var(--color-gold-light) 0 4px, color-mix(in srgb, var(--color-gold) 60%, var(--color-surface)) 4px 7px); }
 .expectedRelief {
-  background: repeating-linear-gradient(135deg, var(--color-gold-light) 0 4px, var(--color-gold) 4px 7px);
+  background: repeating-linear-gradient(135deg, var(--color-surface) 0 5px, var(--color-gold) 5px 6px);
+  box-shadow: inset 0 0 0 1px var(--color-gold);
 }
+.reliefSwatch.expectedRelief { background: repeating-linear-gradient(135deg, var(--color-surface) 0 3px, var(--color-gold) 3px 4px); } /* 범례 칸은 작아서 선 간격만 좁힘 */
 
 .barRia, .barRelief, .barProjected {
   display: flex;

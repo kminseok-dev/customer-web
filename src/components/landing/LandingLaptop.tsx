@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import type { Reg } from './landingRefs'
+import { SERVICES } from './landingScenes'
 import { EX_DATES } from './landingScenes'
 
 // 노트북(우리 웹) — 원본 #lap. 화면 U1 개설 → U2 입고 → U3 매도, 서비스 장면에서는 캡처 V0~V6.
 // 끼루(#kk)는 노트북 위를 걸어 다닌다(useLandingTimeline의 walk).
 
-const SVC_SHOTS = [0, 1, 2, 3, 4, 5, 6].map((i) => `/assets/landing/svc/v${i}.jpg`)
+const SVC_SHOTS = SERVICES.map((s) => `/assets/landing/svc/v${s.shot}.jpg`) // 서비스 목록 순서대로(landingScenes SERVICES)
 
 function WebNav() {
   return (
