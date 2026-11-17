@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import { withAiDelay } from './aiDelay'
 import { invalidateNewsPersonalization } from '../components/home/newsPrefetch'
 
 // 주식 패키지 API (maria: /api/customer/stock-packages/**)
@@ -341,7 +342,7 @@ export const fetchRecommendations = (filter: RecommendFilter, limit: number) =>
   unwrap(apiClient.get<ApiResponse<RecommendList>>(BASE + '/recommendations', { params: { filter, limit } }))
 // limit: 지금 화면에 보이는 추천 종목 수. 서버가 화면과 같은 종목으로 답하려면 화면과 같은 값을 보내야 한다
 export const askRecommendation = (question: string, focusTicker: string | null, limit: number) =>
-  unwrap(apiClient.post<ApiResponse<RecommendAnswer>>(BASE + '/recommendations/ask', { question, focusTicker, limit }, { timeout: 20000 }))
+  unwrap(withAiDelay(apiClient.post<ApiResponse<RecommendAnswer>>(BASE + '/recommendations/ask', { question, focusTicker, limit }, { timeout: 20000 })))
 
 // 서버가 문구를 주지 않을 때 쓰는 안내. 서버의 추천 안내 문구와 같은 문장으로 맞춰 둔다
 export const REC_DISCLAIMER =
