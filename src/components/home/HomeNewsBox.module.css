@@ -406,6 +406,7 @@
 /* API-driven news states */
 .evidence { font-size: var(--font-size-12); line-height: 1.6; color: var(--color-sub); }
 .notice { margin: 0; padding: var(--space-8) var(--space-16); font-size: var(--font-size-12); }
+.newTheme { color: var(--color-down); font-weight: var(--font-weight-bold); }
 .searchItem { padding: var(--space-8) 0; border-bottom: 1px solid var(--color-line-soft); }
 .searchItem p { margin: var(--space-4) 0; }
 .send:disabled, .qChip:disabled { opacity: .5; cursor: wait; }
