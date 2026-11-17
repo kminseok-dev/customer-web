@@ -1,4 +1,4 @@
-import { useMemo, useLayoutEffect, useRef, useState, type FormEvent } from 'react'
+import { Fragment, useMemo, useLayoutEffect, useRef, useState, type FormEvent } from 'react'
 import type { Article } from '../../api/news'
 import { useAuth } from '../../contexts/authState'
 import { Box } from '../common/Box'
@@ -65,17 +65,36 @@ function ArticleConversation({ customerId, article, summaries }: { customerId: n
   </div>
 }
 
+// 처음 본 보유 종목 테마(시드)를 고객별로 기억해 두고, 그 뒤에 새로 생긴 테마만 돌려준다(종목을 사서 테마가 추가되면 파란색).
+// 저장소를 못 쓰면 표시하지 않는다. ponytail: 브라우저마다 따로 기억 — 다른 브라우저에서는 그 브라우저의 첫 방문이 기준
+function addedThemesOf(customerId: number, themes: string[] | undefined): Set<string> {
+  if (!themes) return new Set()
+  const key = `returns-news-base-themes:${customerId}`
+  try {
+    const saved = localStorage.getItem(key)
+    if (saved === null) {
+      localStorage.setItem(key, JSON.stringify(themes))
+      return new Set()
+    }
+    const base = new Set<string>(JSON.parse(saved))
+    return new Set(themes.filter(theme => !base.has(theme)))
+  } catch {
+    return new Set()
+  }
+}
+
 function PersonalNews({ customerId }: { customerId: number }) {
   const { data, pending, error, reload } = useNewsBriefing(customerId)
   const summaries = useNewsSummaryQueue(customerId, data)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const addedThemes = useMemo(() => addedThemesOf(customerId, data?.themes), [customerId, data?.themes])
   const selected = selectedId ? data?.articles.find(item => item.article.id === selectedId) : undefined
   if (pending) return <p className={styles.main} role="status">보유 종목 뉴스를 불러오고 있어요…</p>
   if (error) return <div className={styles.main} role="alert">{error}<button type="button" onClick={reload}>다시 시도</button></div>
   if (!data?.articles.length) return <p className={styles.main}>{data?.themes?.length ? data.themes.join(', ') + ' 테마 관련 뉴스가 아직 없어요.' : '보유 종목에 등록된 테마가 없어 관련 뉴스를 찾지 못했어요.'}</p>
   if (!summaries) return <p className={styles.main} role="status">기사 요약을 준비하고 있어요…</p>
   return <>
-    {!!data?.themes?.length && <p className={styles.notice}>보유 종목 테마: {data.themes.join(', ')}</p>}
+    {!!data?.themes?.length && <p className={styles.notice}>보유 종목 테마: {data.themes.map((theme, i) => <Fragment key={theme}>{i > 0 && ', '}<span className={addedThemes.has(theme) ? styles.newTheme : undefined}>{theme}</span></Fragment>)}</p>}
     {data?.personalizationStatus !== 'ACTIVE' && <p className={styles.notice}>투자성향이 미진단이거나 만료되어 균형 잡힌 관점으로 설명해 드려요.</p>}
     <div className={styles.cols}>
       {selected ? <ArticleConversation key={`${customerId}:${selected.article.id}:${selected.article.version}`} customerId={customerId} article={selected.article} summaries={summaries} />
