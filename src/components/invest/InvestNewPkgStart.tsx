@@ -132,7 +132,7 @@ export function InvestNewPkgStart({ tendency, addedCodes, ask, onPick }: Props) 
         <form className={styles.kkForm} onSubmit={onSubmit}>
           <input className={styles.kkInput} value={text} onChange={(e) => setText(e.target.value.slice(0, 60))} placeholder="예: 배당 ETF만 보여줘, 반도체 테마로 3등급부터 5등급까지" aria-label="끼루에게 조건 말하기" />
           <button type="submit" className={styles.send} disabled={parse.phase === 'loading'}>
-            {parse.phase === 'loading' ? '바꾸는 중…' : '조건으로 바꾸기'}
+            {parse.phase === 'loading' ? '조건에 맞게 검색중...' : '조건으로 바꾸기'}
           </button>
         </form>
         {parse.phase !== 'idle' && (

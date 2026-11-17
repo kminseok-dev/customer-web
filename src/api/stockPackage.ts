@@ -1,5 +1,4 @@
 import { apiClient } from './client'
-import { withAiDelay } from './aiDelay'
 import { invalidateNewsPersonalization } from '../components/home/newsPrefetch'
 
 // 주식 패키지 API (maria: /api/customer/stock-packages/**)
@@ -257,7 +256,7 @@ const unwrap = <T>(p: Promise<{ data: ApiResponse<T> }>): Promise<T> => p.then((
 export const fetchTendency = () => unwrap(apiClient.get<ApiResponse<Tendency>>(BASE + '/tendency'))
 export const fetchThemes = () => unwrap(apiClient.get<ApiResponse<string[]>>(BASE + '/candidates/themes'))
 export const searchCandidates = (req: CandidateRequest) => unwrap(apiClient.post<ApiResponse<CandidateList>>(BASE + '/candidates', req))
-export const parseCondition = (text: string) => unwrap(withAiDelay(apiClient.post<ApiResponse<ParseResult>>(BASE + '/candidates/parse', { text })))
+export const parseCondition = (text: string) => unwrap(apiClient.post<ApiResponse<ParseResult>>(BASE + '/candidates/parse', { text }))
 export const checkPackage = (items: CheckRequestItem[]) => unwrap(apiClient.post<ApiResponse<CheckResult>>(BASE + '/check', { items }))
 export const fetchPackages = () => unwrap(apiClient.get<ApiResponse<PackageSummary[]>>(BASE))
 export const fetchPackage = (id: number) => unwrap(apiClient.get<ApiResponse<PackageDetail>>(BASE + '/' + id))
@@ -342,7 +341,7 @@ export const fetchRecommendations = (filter: RecommendFilter, limit: number) =>
   unwrap(apiClient.get<ApiResponse<RecommendList>>(BASE + '/recommendations', { params: { filter, limit } }))
 // limit: 지금 화면에 보이는 추천 종목 수. 서버가 화면과 같은 종목으로 답하려면 화면과 같은 값을 보내야 한다
 export const askRecommendation = (question: string, focusTicker: string | null, limit: number) =>
-  unwrap(withAiDelay(apiClient.post<ApiResponse<RecommendAnswer>>(BASE + '/recommendations/ask', { question, focusTicker, limit }, { timeout: 20000 })))
+  unwrap(apiClient.post<ApiResponse<RecommendAnswer>>(BASE + '/recommendations/ask', { question, focusTicker, limit }, { timeout: 20000 }))
 
 // 서버가 문구를 주지 않을 때 쓰는 안내. 서버의 추천 안내 문구와 같은 문장으로 맞춰 둔다
 export const REC_DISCLAIMER =

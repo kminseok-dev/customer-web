@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react'
 import type { BotMessage } from '../components/common/ChatbotFab'
-import { AI_MIN_WAIT_MS } from './aiDelay'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:10000'
 const MAX_HISTORY = 18 // 서버 허용 20개, 새 질문 2개 여유 확보
@@ -52,9 +51,6 @@ export function useChatStream(greeting?: BotMessage) {
 
       const abort = new AbortController()
       abortRef.current = abort
-      // 첫 글자는 보낸 뒤 최소 3초가 지나야 보인다(그동안 "끼루가 답을 찾는 중..."). 이후 글자는 그대로 흘려보낸다
-      const startedAt = Date.now()
-      let waited = false
 
       try {
         const response = await fetch(`${BASE_URL}/api/customer/chat/stream`, {
@@ -91,11 +87,6 @@ export function useChatStream(greeting?: BotMessage) {
               content?: string
             }
             if (event.type === 'token' && event.content) {
-              if (!waited) {
-                waited = true
-                const left = AI_MIN_WAIT_MS - (Date.now() - startedAt)
-                if (left > 0) await new Promise((resolve) => setTimeout(resolve, left))
-              }
               setMessages((prev) => {
                 const last = prev[prev.length - 1]
                 if ('kk' in last)

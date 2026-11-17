@@ -26,8 +26,8 @@ export const newsApi = {
     return (await apiClient.get<ApiResponse<Briefing>>('/api/customer/news/briefing', { signal })).data.data
   },
   async summary(article: Article, signal: AbortSignal) {
-    return (await withAiDelay(apiClient.post<ApiResponse<Answer>>(`/api/customer/news/articles/${encodeURIComponent(article.id)}/summary`,
-      { articleVersion: article.version }, { signal }))).data.data
+    return (await apiClient.post<ApiResponse<Answer>>(`/api/customer/news/articles/${encodeURIComponent(article.id)}/summary`,
+      { articleVersion: article.version }, { signal })).data.data
   },
   async question(article: Article, question: string, messages: Message[], signal: AbortSignal) {
     return (await withAiDelay(apiClient.post<ApiResponse<Answer>>(`/api/customer/news/articles/${encodeURIComponent(article.id)}/questions`,
